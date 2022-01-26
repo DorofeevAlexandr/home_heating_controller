@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
-from flask import Blueprint, render_template
+from flask import Blueprint, current_app, render_template
 from webapp.trends.forms import SelectDateForm
 from webapp.trends.models import Trends
+from webapp.weather import weather_by_city
 
 blueprint = Blueprint('trends', '__name__')
 
@@ -20,6 +21,7 @@ def monitor():
     title = "Мониторинг системы отопления"
     chart_data = ChartData()
     chart_data.read_data_in_base(select_date)
+    weather = weather_by_city(current_app.config["WEATHER_DEFAULT_CITY"])
     return render_template('trends/index.html',
                            page_title=title, form=form,
                            values=[chart_data.temperatures_in_house,
@@ -27,7 +29,8 @@ def monitor():
                                    chart_data.temperatures_heating_collector],
                            labels=chart_data.times,
                            legends=chart_data.legends,
-                           select_date=chart_data.st_select_date)
+                           select_date=chart_data.st_select_date,
+                           weather=weather)
 
 
 class ChartData():
