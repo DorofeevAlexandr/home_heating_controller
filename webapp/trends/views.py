@@ -22,6 +22,7 @@ def monitor():
     chart_data = ChartData()
     chart_data.read_data_in_base(select_date)
     weather = weather_by_city(current_app.config["WEATHER_DEFAULT_CITY"])
+    last_value = read_last_data_in_base()
     return render_template('trends/index.html',
                            page_title=title, form=form,
                            values=[chart_data.temperatures_in_house,
@@ -30,7 +31,8 @@ def monitor():
                            labels=chart_data.times,
                            legends=chart_data.legends,
                            select_date=chart_data.st_select_date,
-                           weather=weather)
+                           weather=weather,
+                           current_value=last_value)
 
 
 class ChartData():
@@ -56,3 +58,12 @@ class ChartData():
             self.temperatures_in_house.append(point.temp_in_house)
             self.temperatures_outdoor.append(point.temp_outdoor)
             self.temperatures_heating_collector.append(point.temp_heating_collector)
+
+
+def read_last_data_in_base():
+    last_data_trends = Trends.query.order_by(Trends.id.desc()).first()
+    return {'time': last_data_trends.time.strftime('%Y.%m.%d %H:%M:%S'),
+            'temp_in_house': last_data_trends.temp_in_house,
+            'temp_outdoor': last_data_trends.temp_outdoor,
+            'temp_heating_collector': last_data_trends.temp_heating_collector,
+            }
