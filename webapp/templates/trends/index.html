@@ -28,6 +28,113 @@
         </table>
         </form>
 
+
+
+
+    <!-- bar chart canvas element -->
+    <canvas id="myChart" width="800" height="700"></canvas>
+    <p id="caption">Графики температур за {{select_date}}</p>
+    <script>
+        // Global parameters:
+        // do not resize the chart canvas when its container does (keep at 600x400px)
+        Chart.defaults.global.responsive = false;
+    
+        // define the chart data
+        var chartData = {
+            labels : [{% for item in labels %}
+                        "{{item}}",
+                    {% endfor %}],
+            datasets : [{
+            label: '{{ legends[0] }}',
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(0,200,0,0.6)",
+            borderColor: "rgba(0,200,0,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(0,200,0,1)",
+            pointBackgroundColor: "rgba(0,200,0,0.6)",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(0,200,0,1)",
+            pointHoverBorderColor: "rgba(0,200,0,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 3,
+            pointHitRadius: 10,
+            data : [{% for item in values[0] %}
+                        {{item}} + 10,
+                    {% endfor %}],
+            spanGaps: false
+            },
+            {
+            label: '{{ legends[1] }}',
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(0,0,200,0.6)",
+            borderColor: "rgba(0,0,200,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(0,0,200,1)",
+            pointBackgroundColor: "rgba(0,0,200,0.6)",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(0,0,200,1)",
+            pointHoverBorderColor: "rgba(0,0,200,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 3,
+            pointHitRadius: 10,
+            data : [{% for item in values[1] %}
+                        {{item}},
+                    {% endfor %}],
+            spanGaps: false
+            },
+            {
+            label: '{{ legends[2] }}',
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(200,0,0,0.6)",
+            borderColor: "rgba(200,0,0,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(200,0,0,1)",
+            pointBackgroundColor: "rgba(200,0,0,0.6)",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(200,0,0,1)",
+            pointHoverBorderColor: "rgba(200,0,0,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 3,
+            pointHitRadius: 10,
+            data : [{% for item in values[2] %}
+                        {{item}},
+                    {% endfor %}],
+            spanGaps: false
+            }
+            ]
+        }
+    
+        // get chart canvas
+        var ctx = document.getElementById("myChart").getContext("2d");
+    
+        // create the chart using the chart canvas
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+        });
+        </script>
+
+
+
+
+
+
+
     </div>
     <div class='col-4'>
         <h2>Прогноз погоды</h2>
