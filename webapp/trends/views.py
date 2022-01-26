@@ -7,7 +7,7 @@ blueprint = Blueprint('trends', '__name__')
 
 
 @blueprint.route('/monitor', methods=['GET', 'POST'])
-def chart():
+def monitor():
     form = SelectDateForm()
     if form.select_date.data:
         select_date = form.select_date.data
@@ -17,7 +17,7 @@ def chart():
     # if form.validate_on_submit():
     #     s_begin_time = form.select_date.data
     #     return redirect(url_for('trends.monitor'))
-    title = "Архив температуры"
+    title = "Мониторинг системы отопления"
     chart_data = ChartData()
     chart_data.read_data_in_base(select_date)
     return render_template('trends/index.html',
@@ -45,11 +45,11 @@ class ChartData():
         # begin_time = select_date.replace(hour=0, minute=0, second=0)
         begin_time = datetime.combine(select_date, datetime.min.time())
         end_time = begin_time + timedelta(hours=23, minutes=59, seconds=59)
-        self.st_select_date = begin_time.strftime('%d.%m.%Y %H:%M:%S')
+        self.st_select_date = begin_time.strftime('%d.%m.%Y')
 
         trend_data = Trends.query.filter((Trends.time > begin_time) & (Trends.time < end_time)).all()
         for point in trend_data:
-            self.times.append(point.time.strftime('%d %H:%M:%S'))
+            self.times.append(point.time.strftime('%H:%M:%S'))
             self.temperatures_in_house.append(point.temp_in_house)
             self.temperatures_outdoor.append(point.temp_outdoor)
             self.temperatures_heating_collector.append(point.temp_heating_collector)
