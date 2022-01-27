@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+<div class='row'>
+    <div class='col-8'>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <div class="alert alert-warning" role="alert">
+              {% for message in messages %}
+                  {{ message }}<br>
+              {% endfor %}
+          </div>
+          {% endif %}
+        {% endwith %}
+
+
+        <form action="" method="post"  novalidate>
+        <table>
+            <tr>
+                <td>
+                    {{ form.select_date.label }}
+                </td>
+                <td>
+                    {{ form.select_date }}
+                </td>
+                <td>{{ form.update }} </td>
+            </tr>
+        </table>
+        </form>
+
+
+
+
+        <!-- bar chart canvas element -->
+        <canvas id="myChart" width="800" height="700"></canvas>
+        <p id="caption">Графики температур за {{select_date}}</p>
+        <script>
+            // Global parameters:
+            // do not resize the chart canvas when its container does (keep at 600x400px)
+            Chart.defaults.global.responsive = false;
+        
+            // define the chart data
+            var chartData = {
+                labels : [{% for item in labels %}
+                            "{{item}}",
+                        {% endfor %}],
+                datasets : [{
+                label: '{{ legends[0] }}',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(0,200,0,0.6)",
+                borderColor: "rgba(0,200,0,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(0,200,0,1)",
+                pointBackgroundColor: "rgba(0,200,0,0.6)",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(0,200,0,1)",
+                pointHoverBorderColor: "rgba(0,200,0,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 3,
+                pointHitRadius: 10,
+                data : [{% for item in values[0] %}
+                            {{item}},
+                        {% endfor %}],
+                spanGaps: false
+                },
+                {
+                label: '{{ legends[1] }}',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(0,0,200,0.6)",
+                borderColor: "rgba(0,0,200,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(0,0,200,1)",
+                pointBackgroundColor: "rgba(0,0,200,0.6)",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(0,0,200,1)",
+                pointHoverBorderColor: "rgba(0,0,200,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 3,
+                pointHitRadius: 10,
+                data : [{% for item in values[1] %}
+                            {{item}},
+                        {% endfor %}],
+                spanGaps: false
+                },
+                {
+                label: '{{ legends[2] }}',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(200,0,0,0.6)",
+                borderColor: "rgba(200,0,0,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(200,0,0,1)",
+                pointBackgroundColor: "rgba(200,0,0,0.6)",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(200,0,0,1)",
+                pointHoverBorderColor: "rgba(200,0,0,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 3,
+                pointHitRadius: 10,
+                data : [{% for item in values[2] %}
+                            {{item}},
+                        {% endfor %}],
+                spanGaps: false
+                }
+                ]
+            }
+        
+            // get chart canvas
+            var ctx = document.getElementById("myChart").getContext("2d");
+        
+            // create the chart using the chart canvas
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+            });
+            </script>
+    
+
+    </div>
+
+    <div class='col-4'>
+        <h2>Прогноз погоды</h2>
+        {% if weather %}
+            Температура: {{ weather.temp_C }}, ощущается как {{ weather.FeelsLikeC }}
+        {% else %}
+            Сервис погоды временно недоступен
+        {% endif %}
+
+        
+        <hr //>
+        <h3>Текущие значения температур</h3>
+        <p>время измерения - {{ current_value['time'] }} </p>
+        <h4>Темп. в доме - {{ current_value['temp_in_house'] }}, °C</h4>
+        <h4>Темп. на улице - {{ current_value['temp_outdoor'] }}, °C</h4>
+        <h4>Темп. кол. отопления - {{ current_value['temp_heating_collector'] }}, °C</h4>
+
+
+    </div>
+</div>
+{% endblock %}
