@@ -1,6 +1,6 @@
 from datetime import datetime
-from datetime import time as _time
 from sensors_DS18B20 import Sensors_DS18B20
+import time as _time
 from webapp import create_app
 from webapp.db import db
 from webapp.trends.models import Trends
