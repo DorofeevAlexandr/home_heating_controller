@@ -40,9 +40,9 @@ def add_reccord_in_base(time, temp_in_house=None,
 def read_values():
     sensors = Sensors_DS18B20()
     return {'time': datetime.now(),
-            'temp_in_house': sensors('28-8a201681c3ff'),
-            'temp_outdoor': sensors('28-20320c3f4fd9'),
-            'temp_heating_collector': sensors('28-8a201653deff')
+            'temp_in_house': sensors.read_temp('28-8a201681c3ff'),
+            'temp_outdoor': sensors.read_temp('28-20320c3f4fd9'),
+            'temp_heating_collector': sensors.read_temp('28-8a201653deff')
             }
 
 

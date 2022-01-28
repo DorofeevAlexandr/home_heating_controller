@@ -16,7 +16,7 @@ def weather_by_city(city_name):
         print(result)
         print('--')
         result.raise_for_status()
-        weather = result.json()        
+        weather = result.json()
         if 'data' in weather:
             if 'current_condition' in weather['data']:
                 try:
