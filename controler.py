@@ -48,10 +48,11 @@ def read_values():
 
 if __name__ == '__main__':
     with app.app_context():
-        values = read_values()
-        if values:
-            add_reccord_in_base(time=values['time'],
-                                temp_in_house=values['temp_in_house'],
-                                temp_outdoor=values['temp_outdoor'],
-                                temp_heating_collector=values['temp_heating_collector'])
-        _time.sleep(10)
+        while True:
+            values = read_values()
+            if values:
+                add_reccord_in_base(time=values['time'],
+                                    temp_in_house=values['temp_in_house'],
+                                    temp_outdoor=values['temp_outdoor'],
+                                    temp_heating_collector=values['temp_heating_collector'])
+            _time.sleep(10)
