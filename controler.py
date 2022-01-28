@@ -1,4 +1,6 @@
 from datetime import datetime
+from datetime import time as _time
+from sensors_DS18B20 import Sensors_DS18B20
 from webapp import create_app
 from webapp.db import db
 from webapp.trends.models import Trends
@@ -36,11 +38,11 @@ def add_reccord_in_base(time, temp_in_house=None,
 
 
 def read_values():
-    pass
+    sensors = Sensors_DS18B20()
     return {'time': datetime.now(),
-            'temp_in_house': None,
-            'temp_outdoor': None,
-            'temp_heating_collector': None,
+            'temp_in_house': sensors('28-8a201681c3ff'),
+            'temp_outdoor': sensors('28-20320c3f4fd9'),
+            'temp_heating_collector': sensors('28-8a201653deff')
             }
 
 
@@ -52,3 +54,4 @@ if __name__ == '__main__':
                                 temp_in_house=values['temp_in_house'],
                                 temp_outdoor=values['temp_outdoor'],
                                 temp_heating_collector=values['temp_heating_collector'])
+        _time.sleep(10)
