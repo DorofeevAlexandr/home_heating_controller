@@ -55,9 +55,18 @@ class ChartData():
         trend_data = Trends.query.filter((Trends.time > begin_time) & (Trends.time < end_time)).all()
         for point in trend_data:
             self.times.append(point.time.strftime('%H:%M:%S'))
-            self.temperatures_in_house.append(point.temp_in_house)
-            self.temperatures_outdoor.append(point.temp_outdoor)
-            self.temperatures_heating_collector.append(point.temp_heating_collector)
+            if point.temp_in_house:
+                self.temperatures_in_house.append(point.temp_in_house)
+            else:
+                self.temperatures_in_house.append(0)
+            if point.temp_outdoor:
+                self.temperatures_outdoor.append(point.temp_outdoor)
+            else:
+                self.temperatures_outdoor.append(0)
+            if point.temp_heating_collector:
+                self.temperatures_heating_collector.append(point.temp_heating_collector)
+            else:
+                self.temperatures_heating_collector.append(0)
 
 
 def read_last_data_in_base():
