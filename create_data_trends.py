@@ -27,7 +27,7 @@ def control_base_max_size(max_size):
 
 if __name__ == '__main__':
     # Временно добавим в базу данные для тестирования отображения трендов
-    DATA_MAX_COUNT = 10000
+    DATA_MAX_COUNT = 10
     with app.app_context():
         time = datetime.now() - timedelta(hours=48)
         delta = timedelta(minutes=1, seconds=1)
